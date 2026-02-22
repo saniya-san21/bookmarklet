@@ -45,13 +45,13 @@
         #gm-search-box { padding: 8px; border-bottom: 1px solid #333; background: #111; }
         #gm-search-input { width: 94%; background: #222; border: 1px solid #444; color: #fff; padding: 6px; border-radius: 4px; font-family: inherit; font-size: 13px; }
         #gm-search-input:focus { border-color: #0f0; outline: none; }
-
+        
         /* Popups */
         .gm-popup { position: fixed; top: 100px; left: 100px; background: #0e0e0e; color: #fff; border: 1px solid #444; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.9); z-index: 2147483650; display: flex; flex-direction: column; min-width: 250px; font-family: sans-serif; }
         .gm-popup-hdr { padding: 8px 12px; background: #1a1a1a; border-bottom: 1px solid #333; cursor: move; user-select: none; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 13px; color: #f5f5f5; }
         .gm-popup-content { padding: 15px; overflow-y: auto; max-height: 400px; }
         .gm-popup-close { background: none; border: none; color: #ff5555; cursor: pointer; font-weight: bold; }
-
+        
         /* Folders & Buttons */
         .gm-folder { margin-bottom: 5px; border: 1px solid #333; border-radius: 4px; overflow: hidden; }
         .gm-folder-hdr { padding: 8px; background: #111; cursor: pointer; font-weight: bold; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; user-select: none; }
@@ -63,7 +63,7 @@
         .gm-toggle-btn { width:100%; padding:8px; margin-bottom:4px; border:1px solid #555; background:#222; color:#ccc; cursor:pointer; font-size:11px; text-align:center; border-radius:3px; }
         .gm-toggle-on { background:#004400; color:#0f0; border-color:#0f0; }
         .gm-hidden { display: none !important; }
-
+        
         /* Shortcut Manager Specific */
         #sc-helper-gui { position:fixed; bottom:20px; right:350px; width:280px; background:#1e1e2d; color:#fff; font-family:sans-serif; border-radius:8px; z-index:2147483655; font-size:13px; border:1px solid #402c84; box-shadow:0 10px 30px rgba(0,0,0,0.5); }
         #sc-header { padding:10px; background:#402c84; display:flex; justify-content:space-between; cursor:pointer; font-weight:bold; }
@@ -108,7 +108,7 @@
        ======================================== */
     const ui = document.createElement('div');
     ui.id = 'gm-ui';
-
+    
     setHTML(ui, `
         <div id="gm-hdr">
             <b>💀 GOD MODE v6</b>
@@ -119,15 +119,15 @@
         </div>
         <div id="gm-content" style="overflow-y:auto;padding:10px;"></div>
     `);
-
+    
     document.body.appendChild(ui);
     bringToFront(ui);
     makeDraggable(ui, ui.querySelector('#gm-hdr'));
-
-    ui.querySelector('.gm-close').onclick = () => {
+    
+    ui.querySelector('.gm-close').onclick = () => { 
         if(window.scHandler) document.removeEventListener('keydown', window.scHandler);
         const sc = document.getElementById('sc-helper-gui'); if(sc) sc.remove();
-        ui.remove();
+        ui.remove(); 
     };
 
     const searchInput = ui.querySelector('#gm-search-input');
@@ -157,7 +157,7 @@
     };
 
     const content = document.getElementById('gm-content');
-
+    
     function createFolder(title, icon) {
         const f = document.createElement('div'); f.className = 'gm-folder';
         setHTML(f, `<div class="gm-folder-hdr"><span>${icon} ${title}</span><span style="font-size:10px">▼</span></div><div class="gm-folder-content"></div>`);
@@ -165,10 +165,10 @@
         f.querySelector('.gm-folder-hdr').onclick = function() { f.classList.toggle('open'); this.querySelector('span:last-child').innerText = f.classList.contains('open') ? '▲' : '▼'; };
         return f.querySelector('.gm-folder-content');
     }
-
+    
     function addBtn(folder, label, action) {
-        const b = document.createElement('button'); b.className = 'gm-btn';
-        setHTML(b, `▶ ${label}`);
+        const b = document.createElement('button'); b.className = 'gm-btn'; 
+        setHTML(b, `▶ ${label}`); 
         b.onclick = action;
         folder.appendChild(b);
     }
@@ -176,7 +176,7 @@
     function addToggle(folder, label, onClick) {
         const b = document.createElement('button'); b.className = 'gm-toggle-btn';
         setHTML(b, label);
-        b.onclick = function() {
+        b.onclick = function() { 
             const isActive = this.classList.toggle('gm-toggle-on');
             onClick(isActive, this);
         };
@@ -187,7 +187,7 @@
        MODULE 1: SHORTCUTS
        ======================================== */
     const scFolder = createFolder('SHORTCUTS', '🚀');
-
+    
     addToggle(scFolder, 'Enable Shortcuts', (active, btn) => {
         const SC_GUI_ID = 'sc-helper-gui';
         if (active) {
@@ -206,10 +206,10 @@
                     </div>
                 `);
                 document.body.appendChild(gui);
-
+                
                 const list = gui.querySelector('#sc-list');
                 const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(shortcuts));
-
+                
                 window.scRender = () => {
                     list.innerHTML = '';
                     Object.entries(shortcuts).forEach(([k, p]) => {
@@ -219,8 +219,8 @@
                         const kIn = row.querySelector('.sc-key');
                         const pIn = row.querySelector('.sc-path');
                         const dBtn = row.querySelector('.sc-del');
-
-                        kIn.oninput = (e) => {
+                        
+                        kIn.oninput = (e) => { 
                             const nk = e.target.value.toLowerCase();
                             if(nk && nk!==k) { delete shortcuts[k]; shortcuts[nk]=pIn.value; save(); }
                         };
@@ -229,7 +229,7 @@
                         list.appendChild(row);
                     });
                 };
-
+                
                 gui.querySelector('#sc-add').onclick = () => { shortcuts['?']='/new'; save(); window.scRender(); };
                 window.scRender();
             }
@@ -261,10 +261,10 @@
        MODULE 2: FACEBOOK (RESTORED ALL TOOLS)
        ======================================== */
     const fbFolder = createFolder('FACEBOOK', '📘');
-
+    
     // 2.1 Launch Message Scraper
     addBtn(fbFolder, 'Launch Message Scraper', () => {
-        const container = createFloatingWindow('msg-scraper-panel', '💬 6-Month Scraper', '300px'); if(!container) return;
+        const container = createFloatingWindow('msg-scraper-panel', '💬 6-Month Scraper', '300px'); if(!container) return; 
         setHTML(container, `
             <div id="sc-cnt" style='font-size:18px; text-align:center; margin-bottom:15px; font-weight:bold; color:#00ff88;'>0 Items</div>
             <button id="sc-rec" style='width:100%; padding:10px; margin-bottom:15px; background:#28a745; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold;'>▶ START RECORDING</button>
@@ -275,13 +275,13 @@
             </div>
             <button id="sc-save" style='width:100%; padding:10px; background:#007bff; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; display:none;'>💾 DOWNLOAD JSON</button>
         `);
-
+        
         let messageHistory=[], globalSeenHashes=new Set(), isRecording=false, scraperInterval, isScrolling=false, scrollDir=-1, scrollTargetElement;
         const counter=container.querySelector('#sc-cnt'), btnRecord=container.querySelector('#sc-rec'), btnSave=container.querySelector('#sc-save');
-
+        
         function findTarget(){ const els=document.querySelectorAll('div'); let max=0, t=null; els.forEach(el=>{ if(el.scrollHeight>el.clientHeight && (getComputedStyle(el).overflowY==='auto'||getComputedStyle(el).overflowY==='scroll')){ const area=el.clientWidth*el.clientHeight; if(area>max){max=area;t=el;}}}); return t||window;}
         function scrollTick(){ if(!isScrolling || !scrollTargetElement) return; scrollTargetElement.scrollBy(0, scrollDir*20); requestAnimationFrame(scrollTick); }
-
+        
         function scanMessages(){
              const mainChat=document.querySelector('[role="main"]'); if(!mainChat)return;
              const elements=mainChat.querySelectorAll('div[role="row"]');
@@ -302,7 +302,7 @@
              });
              counter.innerText=`${messageHistory.length} Items`;
         }
-
+        
         btnRecord.onclick=()=>{ isRecording=!isRecording; btnRecord.innerText=isRecording?"⏸ PAUSE":"▶ RECORD"; if(isRecording) { scraperInterval=setInterval(scanMessages,800); btnSave.style.display="block"; } else clearInterval(scraperInterval); };
         container.querySelector('#sc-up').onclick=()=>{ isScrolling=true; scrollDir=-1; scrollTargetElement=findTarget(); scrollTick(); };
         container.querySelector('#sc-down').onclick=()=>{ isScrolling=true; scrollDir=1; scrollTargetElement=findTarget(); scrollTick(); };
@@ -346,7 +346,7 @@
        ------------------------------------------------------ */
     addBtn(fbFolder, 'YOUR NEW TOOL NAME HERE', () => {
         // 1. (Optional) Create a window if you need a GUI
-        const container = createFloatingWindow('unique-id-here', 'Window Title', '300px');
+        const container = createFloatingWindow('unique-id-here', 'Window Title', '300px'); 
         if(!container) return; // Stop if window is already open
 
         // 2. Set the HTML (Use setHTML for security)
@@ -361,7 +361,7 @@
         container.querySelector('#my-action-btn').onclick = () => {
             // --- PASTE YOUR SCRIPT LOGIC HERE ---
             alert("This is your new isolated code running!");
-
+            
             // Example: Find elements and do something
             // const posts = document.querySelectorAll('div');
             // console.log(posts);
@@ -379,9 +379,9 @@ addBtn(osintFolder, 'Phone Dork Gen', () => {
     setHTML(container, `
         <div style="padding:10px; font-family:sans-serif; color:#eee;">
             <label style="font-size:12px; color:#aaa; display:block; margin-bottom:5px;">Target Number (+880...):</label>
-            <input type="text" id="pi-input" placeholder="+880 1960..."
+            <input type="text" id="pi-input" placeholder="+880 1960..." 
                 style="width:100%; padding:8px; background:#333; border:1px solid #555; color:#fff; border-radius:4px; box-sizing:border-box; margin-bottom:15px;">
-
+            
             <div style="display:flex; flex-direction:column; gap:8px;">
                 <button id="pi-btn-gen" style="padding:10px; background:#28a745; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold;">🔍 Ultimate Search</button>
                 <div style="display:flex; gap:8px;">
@@ -403,9 +403,9 @@ addBtn(osintFolder, 'Phone Dork Gen', () => {
 
         const e164 = "+" + raw;
         const intl = raw;
-
+        
         // Attempt to guess "Local" format (Special handling for BD +880 context)
-        let local = raw;
+        let local = raw; 
         if(raw.startsWith("880")) {
             local = "0" + raw.substring(3); // e.g., 88019... -> 019...
         }
@@ -421,7 +421,7 @@ addBtn(osintFolder, 'Phone Dork Gen', () => {
     container.querySelector('#pi-btn-gen').onclick = () => {
         const fmt = getFormats(inputEl.value);
         if(!fmt) return alert("Please enter a valid number");
-
+        
         // Logic from getGeneralDorks: searches all 3 formats everywhere
         const dork = `intext:"${fmt.intl}" OR intext:"${fmt.e164}" OR intext:"${fmt.local}"`;
         runSearch(dork);
@@ -471,7 +471,7 @@ addBtn(osintFolder, 'Phone Dork Gen', () => {
             btn.innerText = "🚫 AdBlock (Reactive)";
         }
     });
-
+    
     addToggle(toolsFolder, '✍️ Design Mode', (active, btn) => {
         document.designMode = active ? 'on' : 'off';
         btn.innerText = active ? "✍️ Editing: ON" : "✍️ Design Mode";
@@ -550,7 +550,7 @@ addBtn(osintFolder, 'Phone Dork Gen', () => {
         const sleep = (ms) => new Promise(r => setTimeout(r, ms));
         const update = (t, p) => { container.querySelector('#dag-status').innerText = t; container.querySelector('#dag-progress').style.width = p + '%'; };
         const highlight = (el) => { if(el) { el.style.border="3px solid red"; el.scrollIntoView({behavior:"smooth",block:"center"}); } };
-
+        
         container.querySelector('#dag-run').onclick = async function() {
             this.disabled = true; this.style.background = "#555";
             try {
@@ -563,19 +563,136 @@ addBtn(osintFolder, 'Phone Dork Gen', () => {
         };
     });
 
-    /* ========================================
-       MODULE 6: GITHUB & INSTA
-       ======================================== */
-    const ghFolder = createFolder('GITHUB & INSTA', '🌟');
-    addBtn(ghFolder, 'Star All Repos', () => {
-        const btns = document.querySelectorAll('.js-toggler-target[aria-label="Star this repository"]');
-        if(confirm(`Star ${btns.length} repos?`)) btns.forEach(b => b.click());
-    });
-    addBtn(ghFolder, 'Insta Download', () => {
-        document.querySelectorAll('img').forEach(i => {
-            if(i.width<200) return;
-            i.style.border="2px solid #0f0"; i.onclick = (e) => { e.stopPropagation(); window.open(i.src); };
+  /* ========================================
+   MODULE 6: GITHUB & INSTA
+   ======================================== */
+const ghFolder = createFolder('GITHUB & INSTA', '🌟');
+
+addBtn(ghFolder, 'Star All Repos', () => {
+    const btns = document.querySelectorAll('.js-toggler-target[aria-label="Star this repository"]');
+    if(confirm`Star ${btns.length} repos?`) btns.forEach(b => b.click());
+});
+
+addBtn(ghFolder, 'Insta Download', () => {
+    const cfg = { minSize: 200, retryDelay: 1000, successDelay: 2000 };
+    
+    async function dl(url, name, btn) {
+        const orig = btn.dataset.orig;
+        try {
+            btn.innerHTML = '⏳'; btn.disabled = true;
+            const r = await fetch(url);
+            if(!r.ok) throw Error(`HTTP ${r.status}`);
+            const blob = await r.blob();
+            const blobUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = blobUrl; a.download = name;
+            document.body.appendChild(a); a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(blobUrl);
+            btn.innerHTML = '✔'; btn.style.background = '#4CAF50';
+            setTimeout(() => {
+                btn.innerHTML = orig; btn.disabled = false;
+                btn.style.background = btn.dataset.bg;
+            }, cfg.successDelay);
+        } catch(e) {
+            console.error('DL failed:', e);
+            btn.innerHTML = '❌'; btn.style.background = '#f44336';
+            setTimeout(() => {
+                btn.innerHTML = '↗'; btn.style.background = '#2196F3';
+                btn.disabled = false;
+                btn.onclick = ev => { ev.stopPropagation(); window.open(url, '_blank'); };
+            }, cfg.retryDelay);
+        }
+    }
+    
+    function makeBtn(icon, type) {
+        const b = document.createElement('button');
+        b.className = 'ig-dl-btn';
+        b.innerHTML = icon; b.dataset.orig = icon;
+        b.title = type === 'v' ? 'Download Video' : 'Download Image';
+        const isVid = type === 'v';
+        const bg = isVid ? '#e1306c' : 'white';
+        const fg = isVid ? 'white' : 'black';
+        b.dataset.bg = bg;
+        b.style.cssText = `position:absolute;top:10px;right:10px;z-index:999999;background:${bg};color:${fg};border:none;width:35px;height:35px;border-radius:50%;font-weight:bold;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s;opacity:0.9;`;
+        b.onmouseover = () => { b.style.transform = 'scale(1.15)'; b.style.opacity = '1'; };
+        b.onmouseout = () => { b.style.transform = 'scale(1)'; b.style.opacity = '0.9'; };
+        return b;
+    }
+    
+    function attach(el, btn) {
+        const p = el.parentNode;
+        if(getComputedStyle(p).position === 'static') p.style.position = 'relative';
+        p.appendChild(btn);
+    }
+    
+    function getBestSrc(img) {
+        if(img.srcset) {
+            const srcs = img.srcset.split(',').map(s => {
+                const [url, w] = s.trim().split(' ');
+                return { url, w: parseInt(w) || 0 };
+            });
+            srcs.sort((a, b) => b.w - a.w);
+            return srcs[0].url;
+        }
+        return img.src;
+    }
+    
+    function getVidSrc(v) {
+        if(v.src && !v.src.startsWith('blob:')) return v.src;
+        const srcs = v.querySelectorAll('source');
+        if(srcs.length > 0) return srcs[srcs.length - 1].src;
+        const res = performance.getEntriesByType('resource');
+        const vids = res.filter(r => 
+            (r.name.includes('.mp4') || r.name.includes('video') || r.name.includes('cdninstagram')) &&
+            !r.name.includes('.jpg') && !r.name.includes('.webp')
+        );
+        return vids.length > 0 ? vids[vids.length - 1].name : null;
+    }
+    
+    function processImgs() {
+        Array.from(document.querySelectorAll('img')).filter(i => 
+            i.naturalWidth > cfg.minSize && i.naturalHeight > cfg.minSize &&
+            !i.closest('.ig-dl-btn')
+        ).forEach(i => {
+            if(i.parentNode.querySelector('.ig-dl-btn')) return;
+            const src = getBestSrc(i);
+            const btn = makeBtn('⬇', 'i');
+            btn.onclick = e => {
+                e.preventDefault(); e.stopPropagation();
+                dl(src, `insta_img_${Date.now()}.jpg`, btn);
+            };
+            attach(i, btn);
         });
-        alert("Click any green-bordered image to open/download.");
+    }
+    
+    function processVids() {
+        Array.from(document.querySelectorAll('video')).forEach(v => {
+            if(v.parentNode.querySelector('.ig-dl-btn')) return;
+            const btn = makeBtn('🎥', 'v');
+            btn.onclick = e => {
+                e.preventDefault(); e.stopPropagation();
+                const src = getVidSrc(v);
+                if(!src) {
+                    alert('⚠️ Video not loaded yet.\n1. Play the video for a few seconds\n2. Wait for it to buffer\n3. Try downloading again');
+                    return;
+                }
+                dl(src, `insta_vid_${Date.now()}.mp4`, btn);
+            };
+            attach(v, btn);
+        });
+    }
+    
+    processImgs();
+    processVids();
+    
+    const obs = new MutationObserver(() => {
+        processImgs();
+        processVids();
     });
+    obs.observe(document.body, { childList: true, subtree: true });
+    setTimeout(() => obs.disconnect(), 30000);
+    
+    alert('✅ Smart Instagram Downloader activated!\n\n📸 Images: Click ⬇ button\n🎥 Videos: Click 🎥 button\n\nButtons appear on hover over media.');
+});
 })();
