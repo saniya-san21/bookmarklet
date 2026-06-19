@@ -1,0 +1,1 @@
+javascript:(function(){document.querySelectorAll('img').forEach(i=>{i.src='';i.srcset='';});const s=document.createElement('style');s.innerHTML='img, [style*="background-image"] { display: none !important; background-image: none !important; }';document.head.appendChild(s);})();
